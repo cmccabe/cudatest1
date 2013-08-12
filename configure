@@ -16,6 +16,7 @@ Configuration:
   -V, --version           display version information and exit
       --srcdir=DIR        find the sources in DIR
       --debug-build       create a debug (rather than release) build.
+      --verbose-build     create a verbose build.
 
 Installation directories:
   --prefix=PREFIX         Set CMAKE_INSTALL_PREFIX.  Default $install_prefix_default
@@ -32,10 +33,13 @@ curdir="$(dirname $0)"
 srcdir="$curdir"
 build_type="Release"
 install_prefix="$install_prefix_default"
+EXTRAS=""
 while [ $# -gt 0 ]; do
     case "$1" in
         --debug-build)
             build_type="Debug";;
+        --verbose-build)
+            EXTRAS="$EXTRAS -DCUDA_VERBOSE_BUILD=ON -DCUDA_VERBOSE_PTXAS=ON";;
         -h|--help) usage; exit 0;;
         --prefix) shift
             [ $# -eq 0 ] && die "--prefix requires an argument.  -h for help."
@@ -54,5 +58,5 @@ while [ $# -gt 0 ]; do
 done
 
 cmake -DCMAKE_BUILD_TYPE="$build_type" \
-    -DCMAKE_INSTALL_PREFIX="$install_prefix" \
+    $EXTRAS -DCMAKE_INSTALL_PREFIX="$install_prefix" \
     $srcdir
