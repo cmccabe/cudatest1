@@ -2,13 +2,13 @@ project(cudatest1)
 
 cmake_minimum_required(VERSION 2.8)
 
-find_package(CUDA REQUIRED)
-
-option(CUDA_VERBOSE_BUILD
-    "Enable verbose output from nvcc"
-    OFF)
-
+option(CUDA_VERBOSE_BUILD "Enable verbose output from nvcc" OFF)
 set(CUDA_HOST_COMPILATION_CPP OFF)
+
+# we need the 1.1 architecture or better
+set(CUDA_NVCC_FLAGS "-arch=compute_11")
+
+find_package(CUDA REQUIRED)
 
 set(CMAKE_BUILD_TYPE, Release) # can also be Debug
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -fno-strict-aliasing -rdynamic")
